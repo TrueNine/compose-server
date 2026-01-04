@@ -1,0 +1,35 @@
+{
+  "name": "github-actions",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Custom GitHub Actions for CI/CD workflows",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "tsx esbuild.config.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --fix .",
+    "clean": "rm -rf actions/*/dist"
+  },
+  "dependencies": {
+    "@actions/core": "^2.0.1",
+    "@actions/exec": "^2.0.0",
+    "@actions/github": "^6.0.1",
+    "@actions/glob": "^0.5.0",
+    "@iarna/toml": "^2.2.5"
+  },
+  "devDependencies": {
+    "@truenine/eslint9-config": "^1.0.21",
+    "@types/node": "^25.0.3",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "fast-check": "^4.5.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@github-actions/gradle-exec",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Execute Gradle commands with consistent configuration",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "cd ../.. && pnpm build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@github-actions/shared": "workspace:*"
+  }
+}

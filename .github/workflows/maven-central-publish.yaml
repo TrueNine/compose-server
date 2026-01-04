@@ -1,641 +1,94 @@
 name: Publish to Maven Central
-
 on:
-  push:
-    branches: [ main ]
-    tags: [ 'v*' ]
-  release:
-    types: [ published ]
+  push: {tags: ['v*']}
+  release: {types: [published]}
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Release version (e.g., 1.0.0)'
-        required: true
-        type: string
-      dry_run:
-        description: 'Execute dry run (no actual publish)'
-        type: boolean
-        default: false
-      force_publish:
-        description: 'Force publish (ignore Maven Central version existence check)'
-        type: boolean
-        default: false
-      skip_tests:
-        description: 'Skip tests (for emergency releases only)'
-        type: boolean
-        default: false
-
-concurrency:
-  group: maven-publish-${{ github.ref }}
-  cancel-in-progress: false
-
-env:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.caching=true -Dorg.gradle.logging.level=lifecycle -Dorg.gradle.console=plain"
+      version: {description: 'Release version (e.g., 1.0.0)', required: true, type: string}
+      dry_run: {description: Execute dry run, type: boolean, default: false}
+      force_publish: {description: Force publish, type: boolean, default: false}
+concurrency: {group: 'maven-publish-${{ github.ref }}', cancel-in-progress: false}
 
 jobs:
-  pre-publish-validation:
-    name: Pre-publish Validation
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     outputs:
-      version: ${{ steps.version-info.outputs.version }}
-      is-snapshot: ${{ steps.version-info.outputs.is-snapshot }}
-      should-publish: ${{ steps.version-info.outputs['should-publish'] }}
-      version-exists-on-central: ${{ steps.version-info.outputs['version-exists-on-central'] }}
-      java-version: ${{ steps.libs-versions.outputs.java-version }}
-      gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
-
+      version: ${{ steps.version-check.outputs.version || steps.versions.outputs.project-version }}
+      is-snapshot: ${{ steps.version-check.outputs.is-snapshot }}
+      should-publish: ${{ steps.version-check.outputs.should-publish }}
+      version-exists: ${{ steps.version-check.outputs.version-exists }}
+      java-version: ${{ steps.versions.outputs.java-version }}
+      gradle-version: ${{ steps.versions.outputs.gradle-version }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5.0.1
-        with:
-          fetch-depth: 0
-
-      - name: Extract versions from libs.versions.toml
-        id: libs-versions
+      - uses: actions/checkout@v5.0.1
+        with: {fetch-depth: 0}
+      - id: versions
+        uses: ./.github/actions/extract-versions
+      - id: resolve-version
         run: |
-          JAVA_VERSION=$(sed -n 's/^java\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-          GRADLE_VERSION=$(sed -n 's/^org-gradle\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-          
-          echo "java-version=$JAVA_VERSION" >> $GITHUB_OUTPUT
-          echo "gradle-version=$GRADLE_VERSION" >> $GITHUB_OUTPUT
-          
-          echo "Extracted Java version: $JAVA_VERSION from libs.versions.toml"
-          echo "Extracted Gradle version: $GRADLE_VERSION from libs.versions.toml"
-
-      - name: Set up JDK ${{ steps.libs-versions.outputs.java-version }}
-        uses: actions/setup-java@v5.0.0
-        with:
-          java-version: ${{ steps.libs-versions.outputs.java-version }}
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5.0.0
-        with:
-          gradle-version: ${{ steps.libs-versions.outputs.gradle-version }}
-          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Extract version and check Maven Central
-        id: version-info
-        run: |
-          validate_semver() {
-            local version="$1"
-            if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9\.-]+)?(\+[a-zA-Z0-9\.-]+)?$ ]]; then
-              return 0
-            else
-              return 1
-            fi
-          }
-
-          check_artifact_exists() {
-            local group="$1"
-            local artifact="$2"
-            local version="$3"
-          
-            local pom_url="https://repo1.maven.org/maven2/${group//\.//}/${artifact}/${version}/${artifact}-${version}.pom"
-            
-            if curl -f -s --max-time 10 --head "$pom_url" > /dev/null 2>&1; then
-              echo "Found: $artifact-$version exists on Maven Central" >> $GITHUB_STEP_SUMMARY
-              return 0
-            fi
-          
-            echo "Not found: $artifact-$version does not exist" >> $GITHUB_STEP_SUMMARY
-            return 1
-          }
-
-          echo "Determining release version..." >> $GITHUB_STEP_SUMMARY
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            version="${{ github.event.inputs.version }}"
-            echo "Manual version: $version" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ github.event_name }}" == "release" ]]; then
-            version="${{ github.event.release.tag_name }}"
-            version=${version#v}
-            echo "Release tag version: $version" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
-            version="${{ github.ref_name }}"
-            version=${version#v}
-            echo "Tag triggered version: $version" >> $GITHUB_STEP_SUMMARY
-          else
-            version=$(sed -n 's/^project\s*=\s*"\(.*\)"/\1/p' gradle/libs.versions.toml | head -n1)
-            echo "Version from libs.versions.toml: $version" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if ! validate_semver "$version"; then
-            echo "Invalid version format: $version" >> $GITHUB_STEP_SUMMARY
-            echo "Version must follow semantic versioning (x.y.z[-prerelease][+build])" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-
-          echo "version=$version" >> $GITHUB_OUTPUT
-          echo "Version format validated: $version" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "$version" == *"-SNAPSHOT" ]] || [[ "$version" == *"-alpha"* ]] || [[ "$version" == *"-beta"* ]] || [[ "$version" == *"-rc"* ]]; then
-            echo "is-snapshot=true" >> $GITHUB_OUTPUT
-            echo "Pre-release version type" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "is-snapshot=false" >> $GITHUB_OUTPUT
-            echo "Stable release version type" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          should_publish="false"
-          version_exists_on_central="false"
-          force_publish="${{ github.event.inputs.force_publish }}"
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Publishing decision analysis..." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "$force_publish" == "true" ]]; then
-            should_publish="true"
-            echo "Force publish mode enabled - skipping Maven Central version check" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Checking if version $version exists on Maven Central..." >> $GITHUB_STEP_SUMMARY
-          
-            group="io.github.truenine"
-            # Check core artifacts to determine if version exists
-            core_artifacts=("composeserver-shared" "composeserver-cacheable" "composeserver-bom")
-          
-            version_found_count=0
-            for artifact in "${core_artifacts[@]}"; do
-              if check_artifact_exists "$group" "$artifact" "$version"; then
-                version_found_count=$((version_found_count + 1))
-              fi
-            done
-          
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Version check summary: Found $version_found_count out of ${#core_artifacts[@]} core artifacts" >> $GITHUB_STEP_SUMMARY
-          
-            # If any core artifact exists, consider version as published
-            if [[ "$version_found_count" -gt 0 ]]; then
-              should_publish="false"
-              version_exists_on_central="true"
-              echo "Version already exists - Maven Central already has version $version, skipping publish" >> $GITHUB_STEP_SUMMARY
-            else
-              should_publish="true"
-              version_exists_on_central="false"
-              echo "Version does not exist - Maven Central does not have version $version, will publish" >> $GITHUB_STEP_SUMMARY
-            fi
-          fi
-
-          echo "should-publish=$should_publish" >> $GITHUB_OUTPUT
-          echo "version-exists-on-central=$version_exists_on_central" >> $GITHUB_OUTPUT
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Publishing Decision Result" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          if [[ "$should_publish" == "true" ]]; then
-            if [[ "$force_publish" == "true" ]]; then
-              echo "Publishing decision: Force publish - will ignore all checks and publish directly" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "Publishing decision: Continue publish - this version does not exist on Maven Central" >> $GITHUB_STEP_SUMMARY
-            fi
-          else
-            if [[ "$version_exists_on_central" == "true" ]]; then
-              echo "Publishing decision: Skip publish - this version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
-              echo "GitHub Release will still be created for existing Maven Central version" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "Publishing decision: Skip publish - unknown reason" >> $GITHUB_STEP_SUMMARY
-            fi
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger method:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Check version:** $version" >> $GITHUB_STEP_SUMMARY
-
-      - name: Generate pre-publish report
-        run: |
-          echo "## Publishing Readiness" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Check Item | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Version format validation | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ steps.version-info.outputs.version-exists-on-central }}" == "true" ]]; then
-            echo "| Maven Central version check | 📦 Already exists |" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ steps.version-info.outputs.should-publish }}" == "true" ]]; then
-            echo "| Maven Central version check | ✅ Not published |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| Maven Central version check | ❓ Unknown |" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** ${{ steps.version-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Type:** ${{ steps.version-info.outputs.is-snapshot == 'true' && 'Snapshot version' || 'Stable version' }}" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ steps.version-info.outputs.should-publish }}" == "true" ]]; then
-            echo "**Publishing status:** 🚀 Will publish to Maven Central" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ steps.version-info.outputs.version-exists-on-central }}" == "true" ]]; then
-            echo "**Publishing status:** ⏭️ Skip publish (already exists), will create GitHub Release" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "**Publishing status:** ⏸️ Skip publish" >> $GITHUB_STEP_SUMMARY
-          fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "release" ]]; then echo "version=${{ github.event.release.tag_name }}" | sed 's/v//' >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then echo "version=${{ github.ref_name }}" | sed 's/v//' >> $GITHUB_OUTPUT
+          else echo "version=${{ steps.versions.outputs.project-version }}" >> $GITHUB_OUTPUT; fi
+      - id: version-check
+        uses: ./.github/actions/maven-version-check
+        with: {version: '${{ steps.resolve-version.outputs.version }}', force-publish: '${{ github.event.inputs.force_publish || false }}'}
+      - uses: ./.github/actions/publish-report
+        with: {report-type: pre-publish, version: '${{ steps.resolve-version.outputs.version }}'}
 
   publish:
-    name: Publish to Maven Central
-    needs: pre-publish-validation
-    if: ${{ needs.pre-publish-validation.outputs.should-publish == 'true' }}
+    name: Publish
+    needs: validate
+    if: needs.validate.outputs.should-publish == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 60
     environment: maven-central
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6.0.0
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK ${{ needs.pre-publish-validation.outputs.java-version }}
-        uses: actions/setup-java@v5.0.0
-        with:
-          java-version: ${{ needs.pre-publish-validation.outputs.java-version }}
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5.0.0
-        with:
-          gradle-version: ${{ needs.pre-publish-validation.outputs.gradle-version }}
-          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
-          cache-cleanup: on-success
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Dry run publication
+      - uses: actions/checkout@v5.0.1
+        with: {fetch-depth: 0}
+      - uses: actions/setup-java@v5.0.0
+        with: {java-version: '${{ needs.validate.outputs.java-version }}', distribution: temurin}
+      - uses: gradle/actions/setup-gradle@v5.0.0
+        with: {gradle-version: '${{ needs.validate.outputs.gradle-version }}', cache-encryption-key: '${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}'}
+      - name: Publish
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          ./gradlew clean publishToMavenCentral --no-daemon --no-parallel --build-cache --configuration-cache --max-workers=1 \
+            -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
+            -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" -PmavenCentralPassword="${{ secrets.MAVENCENTRAL_PASSWORD }}" \
+            -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
+      - name: Dry Run
         if: github.event.inputs.dry_run == 'true'
         run: |
-          echo "Executing publication dry run..."
-          
-          ./gradlew --stop || true
-          rm -rf ~/.m2/repository/io/github/truenine/ || true
-          
-          ./gradlew clean publishToMavenLocal \
-            --no-daemon \
-            --no-parallel \
-            --build-cache \
-            --configuration-cache \
-            --max-workers=1 \
-            -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
-            -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
+          ./gradlew clean publishToMavenLocal --no-daemon --no-parallel --build-cache --configuration-cache --max-workers=1 \
+            -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
             -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
-        env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
-          CI: true
+      - if: always()
+        uses: ./.github/actions/publish-report
+        with: {report-type: summary, version: '${{ needs.validate.outputs.version }}', publish-success: '${{ job.status == ''success'' }}'}
 
-      - name: Pre-publish validation
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          echo "Pre-publish validation..."
-          
-          missing_secrets=()
-          [[ -z "${{ secrets.GPG_KEY_ID }}" ]] && missing_secrets+=("GPG_KEY_ID")
-          [[ -z "${{ secrets.GPG_PRIVATE_KEY }}" ]] && missing_secrets+=("GPG_PRIVATE_KEY")
-          [[ -z "${{ secrets.MAVENCENTRAL_USERNAME }}" ]] && missing_secrets+=("MAVENCENTRAL_USERNAME")
-          [[ -z "${{ secrets.MAVENCENTRAL_PASSWORD }}" ]] && missing_secrets+=("MAVENCENTRAL_PASSWORD")
-          [[ -z "${{ secrets.GPG_PASSPHRASE }}" ]] && missing_secrets+=("GPG_PASSPHRASE")
-          
-          if [[ ${#missing_secrets[@]} -gt 0 ]]; then
-            echo "Missing required secrets: ${missing_secrets[*]}" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          echo "Verifying network connectivity..."
-          curl -f -s --max-time 10 https://oss.sonatype.org/ > /dev/null || {
-            echo "Sonatype network connectivity issue" >> $GITHUB_STEP_SUMMARY
-          }
-          
-          echo "Validation passed" >> $GITHUB_STEP_SUMMARY
-
-      - name: Final version existence check
-        if: github.event.inputs.dry_run != 'true' && github.event.inputs.force_publish != 'true'
-        run: |
-          echo "Performing final version existence check..."
-          
-          version="${{ needs.pre-publish-validation.outputs.version }}"
-          pom_url="https://repo1.maven.org/maven2/io/github/truenine/composeserver-bom/${version}/composeserver-bom-${version}.pom"
-          
-          if curl -f -s --max-time 8 --head "$pom_url" > /dev/null 2>&1; then
-            echo "ABORT: Version $version already exists on Maven Central!"
-            exit 1
-          fi
-          
-          echo "Final check passed - version $version does not exist"
-
-      - name: Publish to Maven Central
-        if: github.event.inputs.dry_run != 'true'
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 15
-          max_attempts: 2
-          retry_wait_seconds: 30
-          shell: bash
-          command: |
-            echo "Starting publication to Maven Central..."
-            set -euo pipefail
-            
-            ./gradlew --stop || true
-            rm -rf ~/.m2/repository/io/github/truenine/ || true
-            
-            echo "Publishing to Maven Central..." >> $GITHUB_STEP_SUMMARY
-            
-            ./gradlew clean publishToMavenCentral \
-              --no-daemon \
-              --no-parallel \
-              --build-cache \
-              --configuration-cache \
-              --max-workers=1 \
-              -PsigningInMemoryKeyId="${{ secrets.GPG_KEY_ID }}" \
-              -PsigningInMemoryKey="${{ secrets.GPG_PRIVATE_KEY }}" \
-              -PmavenCentralUsername="${{ secrets.MAVENCENTRAL_USERNAME }}" \
-              -PmavenCentralPassword="${{ secrets.MAVENCENTRAL_PASSWORD }}" \
-              -PsigningInMemoryKeyPassword="${{ secrets.GPG_PASSPHRASE }}"
-            
-            echo "Successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
-        env:
-          GRADLE_OPTS: "${{ env.GRADLE_OPTS }}"
-          MAVENCENTRAL_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}
-          MAVENCENTRAL_PASSWORD: ${{ secrets.MAVENCENTRAL_PASSWORD }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          CI: true
-
-      - name: Generate publication summary
-        run: |
-          echo "## Publication Completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Status:** ${{ github.event.inputs.dry_run == 'true' && 'Dry run completed' || 'Official publication completed' }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ github.event.inputs.dry_run }}" != "true" ]]; then
-            echo "### Post-publication Checklist" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] Verify artifacts on Maven Central" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] Update project documentation" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] Publish GitHub Release notes" >> $GITHUB_STEP_SUMMARY
-            echo "- [ ] Notify team members" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Maven Central Link:** https://search.maven.org/search?q=g:io.github.truenine" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Dry run successful, all modules built and signed correctly!" >> $GITHUB_STEP_SUMMARY
-          fi
-
-  create-github-release:
-    name: Create GitHub Release
-    needs: [ pre-publish-validation, publish ]
-    if: |
-      github.event.inputs.dry_run != 'true' && 
-      needs.pre-publish-validation.outputs.is-snapshot == 'false' && 
-      (needs.publish.result == 'success' || 
-       needs.publish.result == 'skipped' || 
-       needs.pre-publish-validation.outputs.version-exists-on-central == 'true')
+  release:
+    name: Release
+    needs: [validate, publish]
+    if: always() && github.event.inputs.dry_run != 'true' && needs.validate.outputs.is-snapshot == 'false' && (needs.publish.result == 'success' || needs.validate.outputs.version-exists == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: write
-
+    permissions: {contents: write}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6.0.0
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v5.0.1
+        with: {fetch-depth: 0}
+      - uses: ./.github/actions/create-release
+        with: {version: '${{ needs.validate.outputs.version }}', token: '${{ secrets.GITHUB_TOKEN }}'}
 
-      - name: Generate release notes
-        id: release-notes
-        run: |
-          version="${{ needs.pre-publish-validation.outputs.version }}"
-          version_exists="${{ needs.pre-publish-validation.outputs.version-exists-on-central }}"
-          publish_status="${{ needs.publish.result }}"
-
-          cat > release_notes.md << 'EOF'
-          ## Release ${{ needs.pre-publish-validation.outputs.version }}
-
-          ### Maven Central Artifacts
-
-          This release is available on Maven Central Repository:
-          
-          ```kotlin
-          implementation("io.github.truenine:composeserver-{module-name}:${{ needs.pre-publish-validation.outputs.version }}")
-          ```
-
-          ```xml
-          <dependency>
-            <groupId>io.github.truenine</groupId>
-            <artifactId>composeserver-{module-name}</artifactId>
-            <version>${{ needs.pre-publish-validation.outputs.version }}</version>
-          </dependency>
-          ```
-
-          ### Release Status
-
-          EOF
-
-          if [[ "$publish_status" == "success" ]]; then
-            echo "✅ **New Release**: This version was just published to Maven Central." >> release_notes.md
-          elif [[ "$version_exists" == "true" ]]; then
-            echo "📦 **Existing Release**: This version already exists on Maven Central. Creating GitHub Release for reference." >> release_notes.md
-          else
-            echo "🔄 **Release**: This version is available on Maven Central." >> release_notes.md
-          fi
-
-          cat >> release_notes.md << 'EOF'
-
-          ### Links
-
-          - [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:${{ needs.pre-publish-validation.outputs.version }})
-          - [Project Documentation](https://github.com/TrueNine/compose-server)
-          - [API Documentation](https://github.com/TrueNine/compose-server/tree/main/docs)
-
-          ---
-
-          **Full Changelog**: https://github.com/TrueNine/compose-server/compare/v${{ needs.pre-publish-validation.outputs.version }}...HEAD
-          EOF
-
-          echo "Generated release notes for version $version (publish_status: $publish_status, version_exists: $version_exists)"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ needs.pre-publish-validation.outputs.version }}
-          name: ${{ needs.pre-publish-validation.outputs.version }}
-          body_path: release_notes.md
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-          make_latest: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update release summary
-        run: |
-          echo "## GitHub Release Created" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version tag:** v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Release link:** https://github.com/TrueNine/compose-server/releases/tag/v${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-
-  post-publish-verification:
-    name: Post-publish Verification
-    needs: [ pre-publish-validation, publish, create-github-release ]
-    if: |
-      github.event.inputs.dry_run != 'true' && 
-      always() && 
-      (needs.publish.result == 'success' || 
-       needs.pre-publish-validation.outputs.version-exists-on-central == 'true')
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Skip verification (save time)
-        run: |
-          echo "Skipping Maven Central sync verification to save time"
-          echo "Publication completed, Maven Central sync usually takes several hours"
-
-      - name: Generate verification report
-        run: |
-          version="${{ needs.pre-publish-validation.outputs.version }}"
-          publish_result="${{ needs.publish.result }}"
-          version_exists="${{ needs.pre-publish-validation.outputs.version-exists-on-central }}"
-          
-          echo "## Publication Verification Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** $version" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Publication Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "$publish_result" == "success" ]]; then
-            echo "- ✅ Publication task completed successfully" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔄 Maven Central sync may take several hours" >> $GITHUB_STEP_SUMMARY
-            echo "- 📝 Recommend manual verification in 4-6 hours" >> $GITHUB_STEP_SUMMARY
-          elif [[ "$version_exists" == "true" ]]; then
-            echo "- 📦 Version already exists on Maven Central" >> $GITHUB_STEP_SUMMARY
-            echo "- ⏭️ Publication was skipped (no need to republish)" >> $GITHUB_STEP_SUMMARY
-            echo "- 🏷️ GitHub Release created for existing version" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⚠️ Publication was skipped" >> $GITHUB_STEP_SUMMARY
-            echo "- 🔍 Check workflow logs for details" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Related Links" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- [Maven Central Search](https://search.maven.org/search?q=g:io.github.truenine%20AND%20v:$version)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Maven Central - All Versions](https://search.maven.org/search?q=g:io.github.truenine)" >> $GITHUB_STEP_SUMMARY
-          echo "- [Sonatype Repository](https://oss.sonatype.org/)" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ needs.create-github-release.result }}" == "success" ]]; then
-            echo "- [GitHub Release](https://github.com/TrueNine/compose-server/releases/tag/v${{ needs.pre-publish-validation.outputs.version }})" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**GitHub Release created successfully**" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.create-github-release.result }}" == "skipped" ]]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**GitHub Release skipped** (pre-release version)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**GitHub Release creation failed**, please create manually" >> $GITHUB_STEP_SUMMARY
-          fi
-
-  failure-handler:
-    name: Handle Failure
-    needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification ]
-    if: always() && (needs.publish.result == 'failure' || needs.create-github-release.result == 'failure')
+  failure:
+    name: Failure Report
+    needs: [validate, publish, release]
+    if: always() && (needs.publish.result == 'failure' || needs.release.result == 'failure')
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
     steps:
-      - name: Generate failure report
-        run: |
-          echo "## Publication Failure Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Version:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger event:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Failure time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "### Failure Status Analysis" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ needs.publish.result }}" == "failure" ]]; then
-            echo "- Maven Central publication failed" >> $GITHUB_STEP_SUMMARY
-            echo "  - Check GPG signing configuration" >> $GITHUB_STEP_SUMMARY
-            echo "  - Verify Maven Central credentials" >> $GITHUB_STEP_SUMMARY
-            echo "  - Confirm network connectivity" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- Maven Central publication succeeded" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [[ "${{ needs.create-github-release.result }}" == "failure" ]]; then
-            echo "- GitHub Release creation failed" >> $GITHUB_STEP_SUMMARY
-            echo "  - Check GITHUB_TOKEN permissions" >> $GITHUB_STEP_SUMMARY
-            echo "  - Verify tag does not already exist" >> $GITHUB_STEP_SUMMARY
-            echo "  - Confirm repository write permissions" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.create-github-release.result }}" == "success" ]]; then
-            echo "- GitHub Release creation succeeded" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Suggested Fix Steps" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. Check the configuration of failed components above" >> $GITHUB_STEP_SUMMARY
-          echo "2. Verify all necessary GitHub Secrets are correctly configured" >> $GITHUB_STEP_SUMMARY
-          echo "3. If network issue, you can re-run the workflow" >> $GITHUB_STEP_SUMMARY
-          echo "4. If problems persist, please create an Issue to report the problem" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Get Help" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- [Create Issue](https://github.com/TrueNine/compose-server/issues/new)" >> $GITHUB_STEP_SUMMARY
-          echo "- [View Documentation](https://github.com/TrueNine/compose-server/tree/main/docs)" >> $GITHUB_STEP_SUMMARY
-
-  workflow-summary:
-    name: Workflow Summary
-    needs: [ pre-publish-validation, publish, create-github-release, post-publish-verification, failure-handler ]
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Generate workflow summary
-        run: |
-          echo "# Maven Central Publication Workflow Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Workflow execution time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger event:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch/Tag:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit SHA:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "## Task Execution Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Task | Status | Result |" >> $GITHUB_STEP_SUMMARY
-          echo "|------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Pre-publish Validation | ${{ needs.pre-publish-validation.result }} | ${{ needs.pre-publish-validation.result == 'success' && 'Pass' || needs.pre-publish-validation.result == 'failure' && 'Failed' || needs.pre-publish-validation.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Maven Central Publication | ${{ needs.publish.result }} | ${{ needs.publish.result == 'success' && 'Pass' || needs.publish.result == 'failure' && 'Failed' || needs.publish.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| GitHub Release | ${{ needs.create-github-release.result }} | ${{ needs.create-github-release.result == 'success' && 'Pass' || needs.create-github-release.result == 'failure' && 'Failed' || needs.create-github-release.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Post-publish Verification | ${{ needs.post-publish-verification.result }} | ${{ needs.post-publish-verification.result == 'success' && 'Pass' || needs.post-publish-verification.result == 'failure' && 'Failed' || needs.post-publish-verification.result == 'skipped' && 'Skipped' || 'Running' }} |" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ needs.pre-publish-validation.outputs.version }}" != "" ]]; then
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "## Version Information" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Version number:** ${{ needs.pre-publish-validation.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-            echo "**Version type:** ${{ needs.pre-publish-validation.outputs.is-snapshot == 'true' && 'Pre-release version' || 'Stable version' }}" >> $GITHUB_STEP_SUMMARY
-            echo "**Publication status:** ${{ needs.pre-publish-validation.outputs.should-publish == 'true' && 'Published' || 'Skipped' }}" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## Overall Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ needs.publish.result }}" == "success" ]]; then
-            echo "✅ **Publication successful!** New version has been successfully published to Maven Central" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.pre-publish-validation.outputs.version-exists-on-central }}" == "true" ]]; then
-            echo "📦 **Publication skipped** - this version already exists on Maven Central. GitHub Release created for reference." >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.publish.result }}" == "skipped" ]]; then
-            echo "⏭️ **Publication skipped** - check pre-publish validation for details" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.publish.result }}" == "failure" ]]; then
-            echo "❌ **Publication failed** - please check error logs and retry" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "🔄 **Workflow in progress** - please wait for completion" >> $GITHUB_STEP_SUMMARY
-          fi
+      - uses: actions/checkout@v5.0.1
+      - uses: ./.github/actions/publish-report
+        with: {report-type: failure, version: '${{ needs.validate.outputs.version }}', error-message: Publication failed, error-details: 'Publish: ${{ needs.publish.result }}, Release: ${{ needs.release.result }}'}

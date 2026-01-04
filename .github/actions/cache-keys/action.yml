@@ -1,0 +1,16 @@
+name: Generate Cache Keys
+description: Generate consistent cache keys for Gradle based on gradle files hash
+outputs:
+  gradle-cache-key:
+    description: Gradle cache key
+    value: ${{ steps.generate.outputs.gradle-cache-key }}
+  deps-cache-key:
+    description: Dependencies cache key
+    value: ${{ steps.generate.outputs.deps-cache-key }}
+runs:
+  using: composite
+  steps:
+    - name: Generate cache keys
+      id: generate
+      shell: bash
+      run: node ${{ github.action_path }}/dist/index.js
