@@ -85,7 +85,7 @@ com-baomidou-mybatis-plus-boot-starter-test = { module = "com.baomidou:mybatis-p
 com-baomidou-mybatis-plus-jsqlparser = { module = "com.baomidou:mybatis-plus-jsqlparser", version.ref = "com-baomidou-mybatis-plus" }
 com-baomidou-mybatis-plus-spring-boot3-starter = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "com-baomidou-mybatis-plus" }
 com-diffplug-spotless-com-diffplug-spotless-gradle-plugin = { module = "com.diffplug.spotless:com.diffplug.spotless.gradle.plugin", version.ref = "com-diffplug-spotless" }
-com-fasterxml-jackson-core-jackson-annotations = "com.fasterxml.jackson.core:jackson-annotations:3.0-rc5"
+com-fasterxml-jackson-core-jackson-annotations = "com.fasterxml.jackson.core:jackson-annotations:2.21"
 com-fasterxml-jackson-core-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "com-fasterxml-jackson2" }
 com-fasterxml-jackson-core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "com-fasterxml-jackson2" }
 com-fasterxml-jackson-dataformat-jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "com-fasterxml-jackson2" }

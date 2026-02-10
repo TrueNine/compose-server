@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit
+
 plugins {
   alias(libs.plugins.org.jetbrains.kotlin.jvm)
   alias(libs.plugins.org.jetbrains.intellij.platform)
@@ -46,5 +48,27 @@ intellijPlatform {
     ideaVersion { sinceBuild = libs.versions.intellij.platform.ide.get() }
     description = file("README.html").readText()
     changeNotes = file("CHANGELOG.html").readText()
+  }
+}
+
+tasks.test {
+  // IntelliJ platform UI tests require a working X11 display server.
+  // On headless environments, use Xvfb: `xvfb-run ./gradlew :ide:ide-idea-mcp:test`
+  onlyIf {
+    val display = System.getenv("DISPLAY")
+    if (display.isNullOrBlank()) {
+      logger.warn("Skipping ide-idea-mcp tests: DISPLAY not set (headless environment)")
+      return@onlyIf false
+    }
+    val result =
+      runCatching {
+          val proc = ProcessBuilder("xdpyinfo").redirectErrorStream(true).start()
+          proc.waitFor(5, TimeUnit.SECONDS) && proc.exitValue() == 0
+        }
+        .getOrDefault(false)
+    if (!result) {
+      logger.warn("Skipping ide-idea-mcp tests: X11 display not responding (use xvfb-run)")
+    }
+    result
   }
 }
