@@ -9,7 +9,7 @@ pluginManagement {
 }
 
 plugins {
-  id("org.gradle.toolchains.foojay-resolver-convention") version "+"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
   // See https://central.sonatype.com/artifact/io.gitee.zjarlin.auto-modules/io.gitee.zjarlin.auto-modules.gradle.plugin
   //id("site.addzero.gradle.plugin.modules-buddy") version "+"
 }

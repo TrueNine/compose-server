@@ -1,6 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val libs = the<org.gradle.accessors.dm.LibrariesForLibs>()
+val targetJavaVersion = libs.versions.java.get().toInt()
+val maxSupportedKotlinJvmTarget = JvmTarget.entries.maxOf { it.target.toIntOrNull() ?: 0 }
+val kotlinJvmTarget = minOf(targetJavaVersion, maxSupportedKotlinJvmTarget).toString()
 
 plugins {
   id("buildlogic.java-conventions")
@@ -14,16 +17,18 @@ dependencies {
 
 kotlin {
   compilerOptions {
-    jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
+    // Keep Kotlin on the highest bytecode level it currently supports while the build JVM/toolchain moves ahead.
+    jvmTarget = JvmTarget.fromTarget(kotlinJvmTarget)
     freeCompilerArgs = listOf(
       "-Xjsr305=strict", "-Xjvm-default=all"
     )
   }
-  jvmToolchain(libs.versions.java.get().toInt())
+  jvmToolchain(targetJavaVersion)
 }
 
 // Ensure the kotlin_module file is generated correctly
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+  jvmTargetValidationMode.set(org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode.WARNING)
   compilerOptions {
     // Ensure the module metadata is generated correctly
     javaParameters.set(true)
@@ -37,4 +42,3 @@ tasks.withType<Jar> {
     into("META-INF")
   }
 }
-
